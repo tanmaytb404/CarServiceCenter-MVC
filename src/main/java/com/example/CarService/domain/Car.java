@@ -21,10 +21,16 @@ public class Car implements Vehicle {
 	Integer CarId;
 
 	@Override
-	public Boolean saveVehicleDetails() {
-		int id = carDAO.save(this);
-		setCarId(id);
-		return id > 0;
+	public int saveVehicleDetails() {
+
+		if (RegisterationNumber != null && CarName != null && CarDetails != null) {
+			int carId = carDAO.save(this);
+			System.out.println("new car added" + this.CarName + "  " + this.RegisterationNumber + this.CarDetails);
+			return carId;
+		} else {
+			return -1;
+		}
+
 	}
 
 	@Override

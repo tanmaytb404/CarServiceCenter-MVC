@@ -1,12 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
 <h1>Registration done successfully</h1>
-</body>
+<a href=<%="/support?id=" + request.getParameter("id")%>>Contact
+	support</a>
+<br>
+<a href=<%="/attendent/" + request.getParameter("id")%>>Attendant</a>
+<br>
 </html>

@@ -6,33 +6,41 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.CarService.domain.Car;
+import com.example.CarService.domain.Vehicle;
 import com.example.CarService.service.Registration;
 
 @Controller
 public class RegisterController {
+    @Autowired
+    Registration registration;
 
-	@RequestMapping("/register")
-	public String getRegistrationPage(Model m) {
-		return "carregister";
-	}
-
-	@Autowired
-	@Qualifier("carRegistrationService")
-	Registration registration;
-
-	@RequestMapping("/done")
-	public String getResponsePage(@ModelAttribute Car car) {
-		if (car.getRegisterationNumber() == null || car.getRegisterationNumber().trim().isEmpty()
+    @RequestMapping(value = "/register")
+    public String getRegistrationPage(Model carModel){
+        Vehicle vehicle=registration.getNewCar();
+        carModel.addAttribute("Vehicle",vehicle);
+        return "carregister";
+    }
+    @RequestMapping(value = "/done")
+    public String getResponsePage(@ModelAttribute("vehicle") Car car){
+    	if (car.getRegisterationNumber() == null || car.getRegisterationNumber().trim().isEmpty()
 				|| car.getCarName() == null || car.getCarName().trim().isEmpty()) {
 			return "carregister";
 		}
-		boolean result = registration.registerCar(car.getRegisterationNumber(), car.getCarName(), car.getCarDetails(),
-				car.getCarWork());
-		if (result)
-			return "success";
-		else
-			return "carregister";
-	}
+        int carId=registration.registerCar(car.getRegisterationNumber(), car.getCarName(), car.getCarDetails(), car.getCarWork());
+        if(carId!=-1){
+            ModelAndView modelAndView = new ModelAndView("redirect:success?id="+carId);
+            return modelAndView.getViewName();
+        }else{
+            return "carregister";
+        }
+
+    }
+    @RequestMapping(value="/success")
+    public String getSuccessPage(@RequestParam String id) {
+        return "success";
+    }
 }

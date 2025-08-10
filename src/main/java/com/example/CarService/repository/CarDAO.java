@@ -10,9 +10,12 @@ public class CarDAO implements DAO<Car> {
 	private List<Car> carList = new ArrayList<>();
 
 	@Override
-	public int save(Car t) {
-		carList.add(t);
-		return carList.size();
+	public int save(Car car) {
+		carList.add(car);
+		int carId = carList.size();
+		car.setCarId(carId);
+		System.out.println("saved details");
+		return carId;
 	}
 
 }
